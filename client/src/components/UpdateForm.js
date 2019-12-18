@@ -34,7 +34,12 @@ const UpdateForm = props => {
      axios
      .put(`http://localhost:5000/api/movies/${movie.id}`, movie)
      .then(res => {
-         setMovie(res.data);
+         const newMovieArr = props.movies.map(item => {
+             if(item.id === res.data){
+                 return res.data
+             }
+         })
+         setMovie(newMovieArr);
          props.history.push(`/movies/${movie.id}`)
      })
      .catch(err => console.log(err))

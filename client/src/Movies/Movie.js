@@ -1,7 +1,6 @@
 import React from "react";
 import axios from "axios";
 import MovieCard from "./MovieCard";
-import UpdateForm from "../components/UpdateForm";
 
 export default class Movie extends React.Component {
   constructor(props) {
@@ -38,6 +37,16 @@ export default class Movie extends React.Component {
     this.props.history.push(`/update-movie/${this.props.match.params.id}`)
   };
 
+  deleteMovie = e => {
+    e.preventDefault();
+    axios.delete(`http://localhost:5000/api/movies/${this.props.match.params.id}`)
+    .then(res => {
+      this.setState({movie: res.data})
+      this.props.history.push(`/`);
+    })
+    .catch(err => console.log(err))
+  }
+
   render() {
     if (!this.state.movie) {
       return <div>Loading movie information...</div>;
@@ -51,7 +60,7 @@ export default class Movie extends React.Component {
           Save
         </div>
         <button onClick={this.editMovie}>Update Movie</button>
-       
+       <button onClick={this.deleteMovie}>Delete</button>
       </div>
     );
   }
