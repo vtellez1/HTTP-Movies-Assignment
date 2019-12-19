@@ -11,6 +11,8 @@ import axios from 'axios'
 const UpdateForm = props => {
  const [movie, setMovie] = useState(initialMovie);
 
+console.log('form', props);
+
  useEffect(() => {
      const movieToEdit = props.movies.find(
          e => `${e.id}` === props.match.params.id
@@ -29,19 +31,25 @@ const UpdateForm = props => {
      });
  };
 
+ const handleStars = e => {
+     setMovie({
+         ...movie,
+         stars: e.target.value.split(',')
+     })
+ }
+
  const handleSubmit = e => {
      e.preventDefault();
      axios
      .put(`http://localhost:5000/api/movies/${movie.id}`, movie)
      .then(res => {
          const newMovieArr = props.movies.map(item => {
-             if(item.id === res.data){
-                 return res.data
-             }
+             return item === item.id ? res.data : item;
          })
          setMovie(newMovieArr);
          props.history.push(`/movies/${movie.id}`)
-     })
+     }
+     )
      .catch(err => console.log(err))
  }
 
@@ -55,7 +63,7 @@ const UpdateForm = props => {
 
                 <input type="number" name="metascore" placeholder= "Metascore" onChange={changeHandler} value={movie.metascore}/>
 
-                <input type="string" name="stars" placeholder= "Stars" onChange={changeHandler} value={movie.stars}/>
+                <input type="string" name="stars" placeholder= "Stars" onChange={handleStars} value={movie.stars}/>
 
                 <button>Update</button>
             </form>
