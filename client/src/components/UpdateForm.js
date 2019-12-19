@@ -43,12 +43,9 @@ console.log('form', props);
      axios
      .put(`http://localhost:5000/api/movies/${movie.id}`, movie)
      .then(res => {
-         const newMovieArr = props.movies.map(item => {
-             return item === item.id ? res.data : item;
-         })
-         setMovie(newMovieArr);
+         setMovie(res.data);
          props.history.push(`/movies/${movie.id}`)
-     }
+        }
      )
      .catch(err => console.log(err))
  }
